@@ -1,0 +1,41 @@
+# Archivos generados por Vivado
+*.jou
+*.log
+*.str
+*.dcp
+*.rpt
+
+# Archivos temporales y de caché
+*.wdb
+*.bin
+*.pb
+*.lso
+
+# Directorios de trabajo y archivos de compilación
+*.runs/
+*.sim/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.webtalk/
+*.gen/
+
+# Resultados de simulación
+*.wcfg
+*.xsim/
+*.vcd
+*.vpd
+
+# Archivos temporales del sistema operativo
+*.tmp
+*.bak
+*.swp
+*.log
+*.v~
+
+# Otros archivos generados
+*.xml
+*.html
+*.backup
+*.zip
+*.tar.gz
