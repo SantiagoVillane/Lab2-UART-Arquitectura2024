@@ -36,7 +36,8 @@ module ALU
     
     always @(*) 
     begin
-        case(i_op)  
+        case(i_op)
+            6'b100000 : temp = i_data_a + i_data_b;  
             6'b100010 : temp = i_data_a - i_data_b;
             6'b100100 : temp = i_data_a & i_data_b;
             6'b100101 : temp = i_data_a | i_data_b;
@@ -44,7 +45,7 @@ module ALU
             6'b000011 : temp = i_data_a >>> i_data_b;
             6'b000010 : temp = i_data_a >> i_data_b;
             6'b100111 : temp = ~(i_data_a|i_data_b);
-            default : temp = i_data_a + i_data_b;
+            default : temp = {NB_DATA{1'b0}};
         endcase
     end
     
