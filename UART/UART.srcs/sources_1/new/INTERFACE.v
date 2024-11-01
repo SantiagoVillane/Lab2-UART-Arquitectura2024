@@ -44,14 +44,14 @@ module INTERFACE
     wire baud_tick;
 
     // Instancia del generador de baudios
-    baud_generator BAUD_RATE_GENERATOR (
+    BAUD_RATE_GENERATOR baud_generator (
         .clk(i_clk),
         .rst(i_rst),
         .baud_tick(baud_tick)
     );
 
     // Instancia del transmisor UART
-    uart_transmitter TX_UART (
+    TX_UART uart_transmitter (
         .i_clck(i_clk),
         .i_reset(i_rst),
         .i_s_tick(baud_tick),
@@ -62,7 +62,7 @@ module INTERFACE
     );
 
     // Instancia del receptor UART
-    uart_receiver receiver (
+    RX_UART uart_receiver (
         .i_clck(i_clk),
         .i_reset(i_rst),
         .i_s_tick(baud_tick),

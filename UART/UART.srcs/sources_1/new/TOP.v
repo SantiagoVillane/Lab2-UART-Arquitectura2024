@@ -32,24 +32,23 @@ module TOP
     output wire o_tx                            // Salida de datos UART (Tx)
 );
 
-    reg [DATA_LEN - 1 : 0] reg_rx;
+    wire [DATA_LEN - 1 : 0] reg_rx;
     
     
     
-    reg [DATA_LEN - 1 : 0] reg_data_A;
-    reg [DATA_LEN - 1 : 0] reg_data_B;
-    reg [DATA_LEN - 1 : 0] reg_resultado;
-    reg [OP_LEN - 1 : 0] reg_op;
-    reg [1:0]   state_reg, state_next;
-    wire o_rx_ready, i_tx_start,o_tx_done_tick;
     
-    localparam [2:0]
-        idle            =   3'b000,
-        read_param_a    =   3'b001,
-        read_param_b    =   3'b010,
-        read_op         =   3'b011,
-        tx_rtdo         =   3'b100;
+    localparam READ_A_STATE=2'b00;
+    localparam READ_B_STATE=2'b01;
+    localparam READ_OPREATION_CODE_STATE=2'b10;
+    localparam CALCULATE_STATE=2'b11;
     
+    reg [1:0] reg_actualState,reg_nextActualState;
+    
+    reg [DATA_LEN-1:0] o_reg_dataA,o_reg_nextDataA;
+    reg [DATA_LEN-1:0] o_reg_dataB,o_reg_nextDataB;
+    reg [DATA_LEN-1:0] o_reg_operationCode,o_reg_nextOperationCode;
+    reg [DATA_LEN-1:0] o_reg_aluResultData,o_reg_nextAluResultData;
+    reg o_reg_txStart,o_reg_nextTxStart;
     
     INTERFACE #(
         .DATA_LENGTH(DATA_LEN)
@@ -78,33 +77,70 @@ module TOP
         .o_data(reg_resultado)
     );
     
-    always @(posedge i_clk, posedge i_rst)
-        if (i_rst)
-            begin
-                state_reg <= idle;
-                reg_data_A <= {(DATA_LEN) {1'b0}};
-                reg_data_B <= {(DATA_LEN) {1'b0}};
-                reg_op <= {(OP_LEN) {1'b0}};
-            end
-        else
-            begin
-                state_reg <= state_next;
-                reg_data_A <= reg_data_A;
-                reg_data_B <= reg_data_B;
-                reg_op <= reg_op;           
-            end
-    
-    always@(*) 
-        begin
-            state_next = state_reg;
-            case(state_reg)
-                idle:
-                read_param_a:
-                read_param_b:
-                read_op:
-                tx_rtdo:
-                 
+    always@(posedge i_clk) begin
+         if(i_rst) begin 
+            reg_actualState<=READ_A_STATE;
+            o_reg_dataA<=0;
+            o_reg_dataB<=0;
+            o_reg_operationCode<=0;
+            o_reg_aluResultData<=0;
+            o_reg_txStart<=0;
         end
+        else begin
+            reg_actualState<=reg_nextActualState;
+            o_reg_dataA<=o_reg_nextDataA;
+            o_reg_dataB<=o_reg_nextDataB;
+            o_reg_operationCode<=o_reg_nextOperationCode;
+            o_reg_aluResultData<=o_reg_nextAluResultData;
+            o_reg_txStart<=o_reg_nextTxStart;
+            
+        end
+    end
+    
+    always@(*) begin
+         reg_nextActualState=reg_actualState;
+         o_reg_nextDataA=o_reg_dataA;
+         o_reg_nextDataB=o_reg_dataB;
+         o_reg_nextOperationCode=o_reg_operationCode;
+         o_reg_nextAluResultData=o_reg_aluResultData;
+         //o_reg_nextData=o_reg_data;
+         //o_reg_nextTxStart=o_reg_txStart;
+         
+         
+         o_reg_nextTxStart=0;
+         //if(i_rxDone) begin
+         //if( i_tick) begin 
+            if(o_rx_ready && reg_actualState==READ_A_STATE) begin
+                //o_reg_nextTxStart=0;//NO SE SI VA AHI XD
+                o_reg_nextDataA=reg_rx;
+                reg_nextActualState=READ_B_STATE;
+            end
+            else if (o_rx_ready && reg_actualState==READ_B_STATE) begin
+                o_reg_nextDataB=reg_rx;
+                reg_nextActualState=READ_OPREATION_CODE_STATE;
+            
+            end
+            else if (o_rx_ready && reg_actualState==READ_OPREATION_CODE_STATE) begin
+                o_reg_nextOperationCode=reg_rx[OP_LEN-1:0];
+                reg_nextActualState=CALCULATE_STATE;
+                //reg_nextActualState=READ_A_STATE;
+                //o_reg_nextTxStart=1;
+                //o_reg_nextAluResultData=i_dataAluResult;
+            end
+            else if (reg_actualState==CALCULATE_STATE) begin
+                 o_reg_nextAluResultData=reg_resultado;
+                 reg_nextActualState=READ_A_STATE;
+                 o_reg_nextTxStart=1;
+            end
+         //end
+    end
+    assign o_dataA=o_reg_dataA;
+    assign o_dataB=o_reg_dataB;
+    assign o_operationCode=o_reg_operationCode;
+    //assign o_data=o_reg_data;
+    assign o_data=o_reg_aluResultData;
+    //assign o_data=i_data;
+    assign o_txStart = o_reg_txStart;
     
 
 endmodule
