@@ -29,12 +29,14 @@ module TOP
     input wire  i_clk,                           // Reloj del sistema
     input wire  i_rst,                           // Señal de reset
     input wire  i_rx,                            // Entrada de datos UART (Rx)
-    output wire o_tx                            // Salida de datos UART (Tx)
+    output wire o_tx,                           // Salida de datos UART (Tx)
+    output wire [DATA_LEN-1:0] result_leds
 );
 
     wire [DATA_LEN - 1 : 0] reg_rx;
-    
-    
+    wire [DATA_LEN - 1 : 0] reg_data_a;
+    wire [DATA_LEN - 1 : 0] reg_data_b;
+    wire [OP_LEN - 1 : 0] reg_op;
     
     
     localparam READ_A_STATE=2'b00;
@@ -46,10 +48,12 @@ module TOP
     
     reg [DATA_LEN-1:0] o_reg_dataA,o_reg_nextDataA;
     reg [DATA_LEN-1:0] o_reg_dataB,o_reg_nextDataB;
-    reg [DATA_LEN-1:0] o_reg_operationCode,o_reg_nextOperationCode;
+    reg [OP_LEN-1:0] o_reg_operationCode,o_reg_nextOperationCode;
     reg [DATA_LEN-1:0] o_reg_aluResultData,o_reg_nextAluResultData;
     reg o_reg_txStart,o_reg_nextTxStart;
     
+    wire[DATA_LEN-1:0] reg_resultado; 
+    assign result_leds = reg_resultado;
     INTERFACE #(
         .DATA_LENGTH(DATA_LEN)
     )
@@ -134,11 +138,11 @@ module TOP
             end
          //end
     end
-    assign o_dataA=o_reg_dataA;
-    assign o_dataB=o_reg_dataB;
-    assign o_operationCode=o_reg_operationCode;
+    assign reg_data_A=o_reg_dataA;
+    assign reg_data_B=o_reg_dataB;
+    assign reg_op=o_reg_operationCode;
     //assign o_data=o_reg_data;
-    assign o_data=o_reg_aluResultData;
+    //assign o_data=reg_resultado;
     //assign o_data=i_data;
     assign o_txStart = o_reg_txStart;
     

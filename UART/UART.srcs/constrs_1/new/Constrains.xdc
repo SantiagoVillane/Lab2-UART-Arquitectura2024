@@ -21,8 +21,8 @@ set_property CFGBVS VCCO [current_design];
 
 ## Clock signal
 
-set_property -dict {PACKAGE_PIN E3 IOSTANDARD LVCMOS33} [get_ports i_clock]
-create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports i_clk]
+set_property -dict {PACKAGE_PIN W5 IOSTANDARD LVCMOS33} [get_ports {i_clk}]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports {i_clk}]
 
 ##Switches
 
@@ -48,17 +48,23 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 
 ##LEDs
 
-#set_property -dict {PACKAGE_PIN H5 IOSTANDARD LVCMOS33} [get_ports {o_LEDS[0]}]
-#set_property -dict {PACKAGE_PIN J5 IOSTANDARD LVCMOS33} [get_ports {o_LEDS[1]}]
-#set_property -dict {PACKAGE_PIN T9 IOSTANDARD LVCMOS33} [get_ports {o_LEDS[2]}]
-#set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports {o_LEDS[3]}]
+## Leds
+
+set_property -dict { PACKAGE_PIN U16 IOSTANDARD LVCMOS33 } [get_ports { result_leds[0] }]; 
+set_property -dict { PACKAGE_PIN E19 IOSTANDARD LVCMOS33 } [get_ports { result_leds[1] }]; 
+set_property -dict { PACKAGE_PIN U19 IOSTANDARD LVCMOS33 } [get_ports { result_leds[2] }]; 
+set_property -dict { PACKAGE_PIN V19 IOSTANDARD LVCMOS33 } [get_ports { result_leds[3] }]; 
+set_property -dict { PACKAGE_PIN W18 IOSTANDARD LVCMOS33 } [get_ports { result_leds[4] }]; 
+set_property -dict { PACKAGE_PIN U15 IOSTANDARD LVCMOS33 } [get_ports { result_leds[5] }]; 
+set_property -dict { PACKAGE_PIN U14 IOSTANDARD LVCMOS33 } [get_ports { result_leds[6] }]; 
+set_property -dict { PACKAGE_PIN V14 IOSTANDARD LVCMOS33 } [get_ports { result_leds[7] }]; 
 
 ##Buttons
 
 #set_property -dict { PACKAGE_PIN D9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[0] }]; #IO_L6N_T0_VREF_16 Sch=btn[0]
 #set_property -dict { PACKAGE_PIN C9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[1] }]; #IO_L11P_T1_SRCC_16 Sch=btn[1]
 #set_property -dict { PACKAGE_PIN B9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[2] }]; #IO_L11N_T1_SRCC_16 Sch=btn[2]
-set_property -dict { PACKAGE_PIN B8    IOSTANDARD LVCMOS33 } [get_ports { i_rst }]; #IO_L12P_T1_MRCC_16 Sch=btn[3]
+set_property -dict { PACKAGE_PIN U18    IOSTANDARD LVCMOS33 } [get_ports { i_rst }]; #IO_L12P_T1_MRCC_16 Sch=btn[3]
 
 ##Pmod Header JA
 
@@ -106,9 +112,9 @@ set_property -dict { PACKAGE_PIN B8    IOSTANDARD LVCMOS33 } [get_ports { i_rst 
 
 ##USB-UART Interface
 #es el rx del usb
-set_property -dict {PACKAGE_PIN D10 IOSTANDARD LVCMOS33} [get_ports {o_tx}];
+set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS33} [get_ports {o_tx}];
 #es el tx del usb
-set_property -dict {PACKAGE_PIN A9 IOSTANDARD LVCMOS33} [get_ports {i_rx}];
+set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVCMOS33} [get_ports {i_rx}];
 
 ##ChipKit Single Ended Analog Inputs
 ##NOTE: The ck_an_p pins can be used as single ended analog inputs with voltages from 0-3.3V (Chipkit Analog pins A0-A5).
