@@ -22,41 +22,35 @@
 
 module BAUD_RATE_GENERATOR 
 #(
-    parameter   BAUD_RATE = 9600,                       //bits/sec 
-    parameter   CLOCK_FREQUENCY_MHZ = 100.0,            //MHZ
-    parameter   MHZ_TO_HZ_CONVERSION_FACTOR = 1000000
+    parameter NB_COUNTER = 9,        // Width of the counter (in bits)
+    parameter COUNTER_LIMIT = 326     // Limit for the counter (baud rate frequency divisor)
 )
 (
-    input wire clk,            // Reloj del sistema
-    input wire rst,            // Señal de reset
-    output reg baud_tick       // Señal de tick de baudios
+    input wire i_clk,
+    input wire i_reset,
+    output wire o_tick
 );
 
-    localparam integer NUMBER_OF_STEPS = (CLOCK_FREQUENCY_MHZ * MHZ_TO_HZ_CONVERSION_FACTOR) / (BAUD_RATE * 16);
+// Internal counter register (holds the current count value)
+reg [NB_COUNTER-1 : 0] counter;
+// Next counter value (calculated each clock cycle)
+wire [NB_COUNTER-1 : 0] counter_next;
 
-    // Registro para contar los ciclos del reloj
-    reg [$clog2(NUMBER_OF_STEPS)-1:0] counter; 
+// Synchronous process: Update the counter on every rising edge of i_clk
+always @(posedge i_clk) begin
+    if (i_reset) begin
+        // If reset is active, reset the counter to 0
+        counter <= 0;
+    end
+    else begin
+        // Otherwise, update counter with the next calculated value
+        counter <= counter_next;
+    end
+end
 
-    always @(posedge clk or posedge rst) 
-        begin
-            if (rst) 
-                begin
-                    counter <= 0;
-                    baud_tick <= 0;
-                end 
-            else 
-                begin
-                    if (counter == NUMBER_OF_STEPS - 1) 
-                        begin
-                            counter <= 0;
-                            baud_tick <= 1; // Generar el tick
-                        end 
-                    else 
-                        begin
-                            counter <= counter + 1;
-                            baud_tick <= 0;
-                        end
-                end
-        end
+// Calculate the next value of the counter
+// If counter reaches the COUNTER_LIMIT, reset to 0; otherwise, increment
+assign counter_next = (counter == (COUNTER_LIMIT-1)) ? 0 : counter + 1;
+assign o_tick = (counter == (COUNTER_LIMIT-1)) ? 1'b1 : 1'b0;
 
 endmodule

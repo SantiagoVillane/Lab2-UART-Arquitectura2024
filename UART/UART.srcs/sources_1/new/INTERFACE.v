@@ -45,9 +45,9 @@ module INTERFACE
 
     // Instancia del generador de baudios
     BAUD_RATE_GENERATOR baud_generator (
-        .clk(i_clk),
-        .rst(i_rst),
-        .baud_tick(baud_tick)
+        .i_clk(i_clk),
+        .i_reset(i_rst),
+        .o_tick(baud_tick)
     );
 
     // Instancia del transmisor UART

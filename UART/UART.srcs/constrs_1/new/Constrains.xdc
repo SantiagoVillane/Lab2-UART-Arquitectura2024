@@ -113,8 +113,10 @@ set_property -dict { PACKAGE_PIN U18    IOSTANDARD LVCMOS33 } [get_ports { i_rst
 ##USB-UART Interface
 #es el rx del usb
 set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS33} [get_ports {o_tx}];
+
 #es el tx del usb
 set_property -dict {PACKAGE_PIN B18 IOSTANDARD LVCMOS33} [get_ports {i_rx}];
+
 
 ##ChipKit Single Ended Analog Inputs
 ##NOTE: The ck_an_p pins can be used as single ended analog inputs with voltages from 0-3.3V (Chipkit Analog pins A0-A5).

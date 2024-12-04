@@ -72,7 +72,7 @@ class SerialPortControl:
             return None
 
     def send_data(self, operation: int, operand1: int, operand2: int) -> None:
-        data_to_send: bytes = bytes([operation, operand1, operand2])
+        data_to_send: bytes = bytes([operand1, operand2,operation])
         self.serial_port.write(data_to_send)
 
     def receive_result(self) -> None:
