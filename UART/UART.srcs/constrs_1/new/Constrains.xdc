@@ -22,7 +22,8 @@ set_property CFGBVS VCCO [current_design];
 ## Clock signal
 
 set_property -dict {PACKAGE_PIN W5 IOSTANDARD LVCMOS33} [get_ports {i_clk}]
-create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports {i_clk}]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports {i_clk}] 100MHz
+#create_clock -period 20.000 -name sys_clk_pin -waveform {0.000 10.000} -add [get_ports {i_clk}] #50MHz
 
 ##Switches
 
@@ -64,7 +65,7 @@ set_property -dict { PACKAGE_PIN V14 IOSTANDARD LVCMOS33 } [get_ports { result_l
 #set_property -dict { PACKAGE_PIN D9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[0] }]; #IO_L6N_T0_VREF_16 Sch=btn[0]
 #set_property -dict { PACKAGE_PIN C9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[1] }]; #IO_L11P_T1_SRCC_16 Sch=btn[1]
 #set_property -dict { PACKAGE_PIN B9    IOSTANDARD LVCMOS33 } [get_ports { i_botones[2] }]; #IO_L11N_T1_SRCC_16 Sch=btn[2]
-set_property -dict { PACKAGE_PIN U18    IOSTANDARD LVCMOS33 } [get_ports { i_rst }]; #IO_L12P_T1_MRCC_16 Sch=btn[3]
+set_property -dict { PACKAGE_PIN U18    IOSTANDARD LVCMOS33 } [get_ports { i_reset }]; #IO_L12P_T1_MRCC_16 Sch=btn[3]
 
 ##Pmod Header JA
 
